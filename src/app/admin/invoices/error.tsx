@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import * as Sentry from '@sentry/nextjs'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertCircle } from 'lucide-react'
@@ -28,19 +27,6 @@ export default function InvoicesError({
       },
       error
     )
-
-    // Sentry에 에러 보고 (프로덕션 환경에서만)
-    if (process.env.NODE_ENV === 'production') {
-      Sentry.captureException(error, {
-        level: 'error',
-        tags: {
-          page: 'admin-invoices',
-        },
-        extra: {
-          digest: error.digest,
-        },
-      })
-    }
   }, [error])
   return (
     <div className="flex min-h-[400px] items-center justify-center">

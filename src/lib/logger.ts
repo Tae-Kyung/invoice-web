@@ -1,10 +1,7 @@
 /**
  * 구조화된 로깅 시스템
  * 프로덕션과 개발 환경을 구분하여 로그를 출력하고, 민감 정보를 자동으로 마스킹합니다.
- * 에러 로그는 자동으로 Sentry에 보고됩니다.
  */
-
-import * as Sentry from '@sentry/nextjs'
 
 /**
  * 로그 레벨 타입
@@ -139,19 +136,6 @@ export function log(
   // 에러 객체가 있으면 직렬화하여 추가
   if (error) {
     entry.error = serializeError(error)
-
-    // 에러 로그는 Sentry에 보고 (프로덕션 환경에서만)
-    if (level === 'error' && process.env.NODE_ENV === 'production') {
-      Sentry.captureException(error, {
-        level: 'error',
-        contexts: {
-          custom: {
-            message,
-            ...context,
-          },
-        },
-      })
-    }
   }
 
   // 프로덕션 환경: JSON 형식으로 출력 (로그 수집 도구 호환)

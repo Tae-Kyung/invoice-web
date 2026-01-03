@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
-import * as Sentry from '@sentry/nextjs'
 import { Footer } from '@/components/layout/footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -31,19 +30,6 @@ export default function InvoiceError({
       },
       error
     )
-
-    // Sentry에 에러 보고 (프로덕션 환경에서만)
-    if (process.env.NODE_ENV === 'production') {
-      Sentry.captureException(error, {
-        level: 'error',
-        tags: {
-          page: 'invoice',
-        },
-        extra: {
-          digest: error.digest,
-        },
-      })
-    }
   }, [error])
 
   return (

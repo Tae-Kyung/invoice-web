@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import * as Sentry from '@sentry/nextjs'
 
 /**
  * 전역 에러 바운더리
@@ -16,16 +15,8 @@ export default function GlobalError({
   reset: () => void
 }) {
   useEffect(() => {
-    // Sentry에 전역 에러 보고
-    Sentry.captureException(error, {
-      level: 'fatal',
-      tags: {
-        type: 'global-error',
-      },
-      extra: {
-        digest: error.digest,
-      },
-    })
+    // 콘솔에 에러 로깅 (프로덕션에서는 외부 모니터링 서비스 연동 가능)
+    console.error('Global error:', error)
   }, [error])
 
   return (
@@ -39,7 +30,9 @@ export default function GlobalError({
             {error.message || '애플리케이션을 불러올 수 없습니다.'}
           </p>
           {error.digest && (
-            <p style={{ fontSize: '14px', color: '#999', marginBottom: '24px' }}>
+            <p
+              style={{ fontSize: '14px', color: '#999', marginBottom: '24px' }}
+            >
               오류 ID: {error.digest}
             </p>
           )}
